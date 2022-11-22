@@ -1,0 +1,24 @@
+version: v1
+plugins:
+  - name: prost
+    out: src/gen
+    opt:
+      - compile_well_known_types
+      - extern_path=.google.protobuf=::pbjson_types
+      - file_descriptor_set
+      - retain_enum_prefix
+  - name: prost-serde
+    out: src/gen
+    opt:
+      - retain_enum_prefix
+      - preserve_proto_field_names
+  - name: tonic
+    out: src/gen
+    opt:
+      - compile_well_known_types
+      - extern_path=.google.protobuf=::pbjson_types
+  - name: prost-crate
+    out: src/gen
+    strategy: all
+    opt:
+      - no_features
