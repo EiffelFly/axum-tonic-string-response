@@ -23,6 +23,20 @@ But with this implementation, the the serialized response's test_array field wil
 
 This behavior is not consistent.
 
+```rust
+// rest response
+{
+  message: "Hello Summerbud",
+}
+
+// grpc response
+{
+  message: "Hello Summerbud",
+  test_array: []
+}
+
+```
+
 ## How to reproduce it
 
 ```
