@@ -4,6 +4,7 @@ pub mod greeter_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    ///
     #[derive(Debug, Clone)]
     pub struct GreeterClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -68,6 +69,7 @@ pub mod greeter_client {
             self.inner = self.inner.accept_compressed(encoding);
             self
         }
+        ///
         pub async fn say_hello(
             &mut self,
             request: impl tonic::IntoRequest<super::HelloRequest>,
@@ -96,11 +98,13 @@ pub mod greeter_server {
     ///Generated trait containing gRPC methods that should be implemented for use with GreeterServer.
     #[async_trait]
     pub trait Greeter: Send + Sync + 'static {
+        ///
         async fn say_hello(
             &self,
             request: tonic::Request<super::HelloRequest>,
         ) -> Result<tonic::Response<super::HelloResponse>, tonic::Status>;
     }
+    ///
     #[derive(Debug)]
     pub struct GreeterServer<T: Greeter> {
         inner: _Inner<T>,

@@ -19,27 +19,25 @@ pub async fn greeter_handler(
 }
 ```
 
-But with this implementation, the the serialized response's test_array field will be omitted when you use rest api endpint. But with the grpc api endpoint it will not be omitted.
+But with this implementation, the the serialized response's timestamp field will not have correct type.
 
-This behavior is not consistent.
 
 ```rust
 // rest response
 {
-  message: "Hello Summerbud",
+  timestamp: "123",
 }
 
 // grpc response
 {
-  message: "Hello Summerbud",
-  test_array: []
+  timestamp: "123",
 }
 
 ```
 
 ## How to reproduce it
 
-```
+```bash
 // Install necessary protoc lib in your $PATH
 cargo install protoc-gen-prost protoc-gen-prost-crate protoc-gen-prost-serdeprotoc-gen-tonic
 
@@ -48,17 +46,7 @@ cargo build
 
 // Set up the server
 cargo run
+
+// Get the rest response
+curl http://localhost:8010
 ```
-
-The server will be run on http://localhost:8010
-
-## Some thought
-
-- We are using protoc-gen-serde(which use pbjson under the hood) to generate serde serializer and deserializer for us to speed up the development.
-- In protobuf the default values are omitted and through this nature prost won't serialize the field with default value [source](https://discord.com/channels/500028886025895936/664895722121986061/784543806472192000)
-- What pbjson do is consumes the descriptor output of prost-build and generate the serializer and deserializer
-
-## Potential solution
-
-- We write our own serializer (Which is very repetitive and trouble-prone)
-- We side walk the issue somehow

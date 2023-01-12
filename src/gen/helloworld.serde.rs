@@ -6,14 +6,8 @@ impl serde::Serialize for HelloRequest {
         S: serde::Serializer,
     {
         use serde::ser::SerializeStruct;
-        let mut len = 0;
-        if !self.name.is_empty() {
-            len += 1;
-        }
-        let mut struct_ser = serializer.serialize_struct("helloworld.HelloRequest", len)?;
-        if !self.name.is_empty() {
-            struct_ser.serialize_field("name", &self.name)?;
-        }
+        let len = 0;
+        let struct_ser = serializer.serialize_struct("helloworld.HelloRequest", len)?;
         struct_ser.end()
     }
 }
@@ -24,12 +18,10 @@ impl<'de> serde::Deserialize<'de> for HelloRequest {
         D: serde::Deserializer<'de>,
     {
         const FIELDS: &[&str] = &[
-            "name",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
-            Name,
         }
         impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> std::result::Result<GeneratedField, D::Error>
@@ -50,10 +42,7 @@ impl<'de> serde::Deserialize<'de> for HelloRequest {
                     where
                         E: serde::de::Error,
                     {
-                        match value {
-                            "name" => Ok(GeneratedField::Name),
-                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
-                        }
+                            Err(serde::de::Error::unknown_field(value, FIELDS))
                     }
                 }
                 deserializer.deserialize_identifier(GeneratedVisitor)
@@ -71,19 +60,10 @@ impl<'de> serde::Deserialize<'de> for HelloRequest {
                 where
                     V: serde::de::MapAccess<'de>,
             {
-                let mut name__ = None;
-                while let Some(k) = map.next_key()? {
-                    match k {
-                        GeneratedField::Name => {
-                            if name__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("name"));
-                            }
-                            name__ = Some(map.next_value()?);
-                        }
-                    }
+                while map.next_key::<GeneratedField>()?.is_some() {
+                    let _ = map.next_value::<serde::de::IgnoredAny>()?;
                 }
                 Ok(HelloRequest {
-                    name: name__.unwrap_or_default(),
                 })
             }
         }
@@ -98,18 +78,12 @@ impl serde::Serialize for HelloResponse {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
-        if !self.message.is_empty() {
-            len += 1;
-        }
-        if !self.test_array.is_empty() {
+        if self.timestamp != 0 {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("helloworld.HelloResponse", len)?;
-        if !self.message.is_empty() {
-            struct_ser.serialize_field("message", &self.message)?;
-        }
-        if !self.test_array.is_empty() {
-            struct_ser.serialize_field("test_array", &self.test_array)?;
+        if self.timestamp != 0 {
+            struct_ser.serialize_field("timestamp", ToString::to_string(&self.timestamp).as_str())?;
         }
         struct_ser.end()
     }
@@ -121,15 +95,12 @@ impl<'de> serde::Deserialize<'de> for HelloResponse {
         D: serde::Deserializer<'de>,
     {
         const FIELDS: &[&str] = &[
-            "message",
-            "test_array",
-            "testArray",
+            "timestamp",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
-            Message,
-            TestArray,
+            Timestamp,
         }
         impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> std::result::Result<GeneratedField, D::Error>
@@ -151,8 +122,7 @@ impl<'de> serde::Deserialize<'de> for HelloResponse {
                         E: serde::de::Error,
                     {
                         match value {
-                            "message" => Ok(GeneratedField::Message),
-                            "testArray" | "test_array" => Ok(GeneratedField::TestArray),
+                            "timestamp" => Ok(GeneratedField::Timestamp),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -172,27 +142,21 @@ impl<'de> serde::Deserialize<'de> for HelloResponse {
                 where
                     V: serde::de::MapAccess<'de>,
             {
-                let mut message__ = None;
-                let mut test_array__ = None;
+                let mut timestamp__ = None;
                 while let Some(k) = map.next_key()? {
                     match k {
-                        GeneratedField::Message => {
-                            if message__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("message"));
+                        GeneratedField::Timestamp => {
+                            if timestamp__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("timestamp"));
                             }
-                            message__ = Some(map.next_value()?);
-                        }
-                        GeneratedField::TestArray => {
-                            if test_array__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("testArray"));
-                            }
-                            test_array__ = Some(map.next_value()?);
+                            timestamp__ = 
+                                Some(map.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
+                            ;
                         }
                     }
                 }
                 Ok(HelloResponse {
-                    message: message__.unwrap_or_default(),
-                    test_array: test_array__.unwrap_or_default(),
+                    timestamp: timestamp__.unwrap_or_default(),
                 })
             }
         }

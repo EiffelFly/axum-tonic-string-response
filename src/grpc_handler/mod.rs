@@ -9,12 +9,9 @@ pub struct GreeterServiceImpl {}
 impl pb::helloworld::greeter_server::Greeter for GreeterServiceImpl {
     async fn say_hello(
         &self,
-        req: Request<pb::helloworld::HelloRequest>,
+        _req: Request<pb::helloworld::HelloRequest>,
     ) -> Result<Response<pb::helloworld::HelloResponse>, Status> {
-        let resp = pb::helloworld::HelloResponse {
-            message: format!("Hello {}", req.get_ref().name),
-            test_array: Vec::new(),
-        };
+        let resp = pb::helloworld::HelloResponse { timestamp: 123 };
 
         Ok(Response::new(resp))
     }

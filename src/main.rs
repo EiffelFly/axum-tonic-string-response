@@ -17,7 +17,7 @@ mod pb {
 #[tokio::main]
 async fn main() {
     let http = Router::new()
-        .route("/", axum::routing::post(greeter_handler))
+        .route("/", axum::routing::get(greeter_handler))
         .into_service()
         .map_response(|r| r.map(axum::body::boxed))
         .map_err(BoxError::from)

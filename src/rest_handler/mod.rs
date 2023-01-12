@@ -6,13 +6,7 @@ use http::StatusCode;
 
 use crate::pb;
 
-pub async fn greeter_handler(
-    Json(data): Json<pb::helloworld::HelloRequest>,
-) -> Result<impl IntoResponse, Response> {
-    let resp = pb::helloworld::HelloResponse {
-        message: format!("Hello {}", data.name),
-        test_array: Vec::new(),
-    };
-
+pub async fn greeter_handler() -> Result<impl IntoResponse, Response> {
+    let resp = pb::helloworld::HelloResponse { timestamp: 123 };
     Ok((StatusCode::OK, Json(resp)))
 }
